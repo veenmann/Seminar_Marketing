@@ -16,7 +16,11 @@
  A_matrix = (-1)*A_matrix;
  
  %Create parameter v
+<<<<<<<
  v = 1;
+=======
+ v = 0.07;
+>>>>>>>
  
  %Create cost c
  c = [ones(1,2*size(A,2)),zeros(1),(v*ones(1,4119))];
@@ -26,7 +30,14 @@
  lb(54)=-Inf;
 
  %Run LP optimization
+<<<<<<<
  LP = linprog(c,A_matrix,(-1)*ones(4119,1),[],[],lb,[]);
  w = LP(1:53);
  gamma = LP(54);
  y = LP(55:end);
+=======
+ LP = linprog(c,A_matrix,(-1)*ones(4119,1),[],[],lb,[]);
+ w = LP(1:53);
+ gamma = LP(54)
+ y = LP(55:end);
+>>>>>>>
