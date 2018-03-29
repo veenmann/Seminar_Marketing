@@ -27,7 +27,7 @@
  AA = [-DA      De         I_m    Zero_m;...
         I_n   Zero_n    Zero_n_m    -I_n;...
        -I_n   Zero_n    Zero_n_m   -I_n];
- B = randi(15,size(AA,2));
+ B = randi(100,size(AA,2));
  B = diag(diag(B));
  %B = rand(size(AA,1),size(AA,2));
  AA = AA*B';
