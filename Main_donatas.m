@@ -39,7 +39,6 @@
 cc = [zeros(one, n) zeros(one,one) v*ones(one,m) ones(one,n)];
 cc = cc * B';
 
-
 lb = zeros(2*n+m+one,one);
 lb(1:n+one) = -Inf;
 
