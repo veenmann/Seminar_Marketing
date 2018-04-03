@@ -1,4 +1,4 @@
- %A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8), default_bin(:,1:2), ...
+ %A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
      %housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
       %day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
       %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
@@ -10,13 +10,13 @@
  % CASE = 1         A --> AB', w --> p, t --> q
  % CASE = 2         x = B'u
     
-   CASE = 0;        % <--- CHANGE THIS ONE
+   CASE = 2;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
  % Parameters
  v = 0.07;
- k = 10;
+ k = 400;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);
@@ -35,6 +35,8 @@
  Zero_m_k = zeros(m, k);
  Zero_k_m = zeros(k, m);
  Zero_k_1 = zeros(k, 1);
+ Zero_m_m = zeros(m);
+ Zero_n_n = zeros(n);
  One_m_1  = ones(m, one);
  One_n_1  = ones(n, one);
  One_k_1  = ones(k, one);
@@ -130,20 +132,20 @@
  %              B_t'*u >= 0
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     AA = [-DA      De         I_m    Zero_m_n;...
-          I_n   Zero_n_1    Zero_n_m    -I_n;...
-         -I_n   Zero_n_1    Zero_n_m   -I_n];
- 
-     AA = [AA; ...
-          -eye(size(AA,2))];
+     AA = [-DA          De         I_m     Zero_m_n;...
+            I_n     Zero_n_1    Zero_n_m    -I_n; ...
+           -I_n     Zero_n_1    Zero_n_m    -I_n; ...
+           
+         Zero_m_n   Zero_m_1      -I_m     Zero_m_n; ...
+         Zero_n_n   Zero_n_1    Zero_n_m    -I_n];
 
      bb = [-One_m_1; ...
             Zero_n_1; ...
             Zero_n_1; ...
-            Inf(n,1); ...       % Might cause the problem
-            Inf; ...            % Might cause the problem
+            
             Zero_m_1; ...
             Zero_n_1];
+        
      cc = [Zero_n_1; ...
            Zero_1_1; ...
            v * One_m_1; ...
@@ -153,6 +155,10 @@
      n_new = size(AA, 2);
      
      B = randi(10, k, n_new);
+     %%%%%%%%%%%%%%%%%%%
+     %B = randi(10, n_new);
+     %B = diag(diag(B));
+     %%%%%%%%%%%%%%%%%%%
      AA = AA * B';
      cc = B * cc;
   
