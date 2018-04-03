@@ -133,21 +133,17 @@
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
-     B = rand(k,2*n+m+1);
-     B_w=B(:,1:n);
-     %size(B_w);
-     B_gamma=B(:,n+1);
-     %size(B_gamma);
-     B_y=B(:,n+2:n+1+m);
-     %size(B_y);
-     B_t=B(:,n+2+m:end);
-     %size(B_t);
+     B = rand(k,n_new);
+     B_w=B(k,1:n);
+     B_gamma=B(k,n+1);
+     B_y=B(k,n+2:n+2+m);
+     B_t=B(k,n+2+m:end);
     
-     AA = [-DA*B_w'          De*B_gamma'         I_m*B_y'     Zero_m_n*B_t';...
-            I_n*B_w'     Zero_n_1*B_gamma'    Zero_n_m*B_y'   -I_n*B_t'; ...
-           -I_n*B_w'     Zero_n_1*B_gamma'    Zero_n_m*B_y'     -I_n*B_t'; ...
-         Zero_m_n*B_w'   Zero_m_1*B_gamma'      -I_m*B_y'      Zero_m_n*B_t'; ...
-         Zero_n_n*B_w'   Zero_n_1*B_gamma'    Zero_n_m*B_y'     -I_n*B_t'];
+     AA = [-DA          De         I_m     Zero_m_n;...
+            I_n     Zero_n_1    Zero_n_m    -I_n; ...
+           -I_n     Zero_n_1    Zero_n_m    -I_n; ...
+         Zero_m_n   Zero_m_1      -I_m     Zero_m_n; ...
+         Zero_n_n   Zero_n_1    Zero_n_m    -I_n];
 
      bb = [-One_m_1; ...
             Zero_n_1; ...
@@ -155,12 +151,26 @@
             Zero_m_1; ...
             Zero_n_1];
             
-     cc = [B_w * Zero_n_1; ...
-           B_gamma * Zero_1_1; ...
-           v * B_y * One_m_1; ...
-           B_t * One_n_1];
+     cc = [Zero_n_1; ...
+           Zero_1_1; ...
+           v * One_m_1; ...
+           One_n_1];
       
-          
+     m_new = size(AA, 1);
+     n_new = size(AA, 2);
+     
+     %B = randi(10, n_new, n_new);
+     B = rand(k, n_new);
+     %B = eye(n_new);
+     
+     %%%%%%%%%%%%%%%%%%%
+     %B = randi(10, n_new);
+     %B = diag(diag(B));
+     %%%%%%%%%%%%%%%%%%%
+     
+     AA = AA * B';
+     cc = cc' * B';
+     
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
   
