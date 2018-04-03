@@ -16,7 +16,7 @@
  
  % Parameters
  v = 0.07;
- k = 400;          % k >= number of columns of AA
+ k = 420;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);
@@ -135,17 +135,15 @@
      AA = [-DA          De         I_m     Zero_m_n;...
             I_n     Zero_n_1    Zero_n_m    -I_n; ...
            -I_n     Zero_n_1    Zero_n_m    -I_n; ...
-           
-         Zero_m_n   Zero_m_1      -I_m     Zero_m_n; ...
-         Zero_n_n   Zero_n_1    Zero_n_m    -I_n];
+        ];% Zero_m_n   Zero_m_1      -I_m     Zero_m_n; ...
+         %Zero_n_n   Zero_n_1    Zero_n_m    -I_n];
 
      bb = [-One_m_1; ...
             Zero_n_1; ...
             Zero_n_1; ...
-            
-            Zero_m_1; ...
-            Zero_n_1];
-        
+            %Zero_m_1; ...
+            %Zero_n_1];
+            ];
      cc = [Zero_n_1; ...
            Zero_1_1; ...
            v * One_m_1; ...
@@ -154,7 +152,9 @@
      m_new = size(AA, 1);
      n_new = size(AA, 2);
      
-     B = randi(10, k, n_new);
+     B = randi(10, n_new, n_new);
+     %B = rand(k, n_new);
+     %B = eye(n_new);
      %%%%%%%%%%%%%%%%%%%
      %B = randi(10, n_new);
      %B = diag(diag(B));
@@ -162,8 +162,10 @@
      AA = AA * B';
      cc = B * cc;
   
+     lb = zeros(n_new,one);
+     lb(1:n+one) = -Inf;
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], lb, [], options);
   
      %%% Finding private coefficients
      try
