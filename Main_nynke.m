@@ -1,15 +1,22 @@
+%A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
+     %housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
+      %day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
+      %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
+  %A = [age, duration, campaign, pdays, previous,...
+      %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
- function Main_donatas(A,e)
+ 
  % CASE = 0         Original problem
  % CASE = 1         A --> AB', w --> p, t --> q
  % CASE = 2         x = B'u
     
-   CASE = 0;        % <--- CHANGE THIS ONE
+   CASE = 1;        % <--- CHANGE THIS ONE
+ 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
  % Parameters
  v = 0.07;
- k = 420;          % k >= number of columns of AA
+ k = 4226;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);
@@ -28,16 +35,19 @@
  Zero_m_k = zeros(m, k);
  Zero_k_m = zeros(k, m);
  Zero_k_1 = zeros(k, 1);
+ Zero_k_k = zeros(k,k);
  Zero_m_m = zeros(m);
  Zero_n_n = zeros(n);
  One_m_1  = ones(m, one);
  One_n_1  = ones(n, one);
  One_k_1  = ones(k, one);
- I_m = -eye(m);
+ I_m = eye(m);
  I_n = eye(n);
  I_k = eye(k);
  
  %%%%%%%%%%%%%%%%%%%%%%% MAIN PROGRAM %%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+ 
  if CASE == 0
  %%%%%%%%%%%%%%%%%%%%%%%%% ORIGINAL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %
@@ -48,16 +58,16 @@
  %           y >= 0
  %           t >= 0
  %
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     AA = [-DA        De         -I_m       Zero_m_n;...
-            I_n     Zero_n_1   Zero_n_m     -I_n;...
-           -I_n     Zero_n_1   Zero_n_m     -I_n ; ...
-         Zero_m_n   Zero_m_1    -I_m       Zero_m_n; ...
-         Zero_n_n   Zero_n_1   Zero_n_m     -I_n];
-   AA
-     bb = [-One_m_1;...
-            Zero_n_1;...
-            Zero_n_1;...
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     AA = [-DA          De         -I_m     Zero_m_n;...
+            I_n     Zero_n_1    Zero_n_m    -I_n; ...
+           -I_n     Zero_n_1    Zero_n_m    -I_n; ...
+         Zero_m_n   Zero_m_1      -I_m     Zero_m_n; ...
+         Zero_n_n   Zero_n_1    Zero_n_m    -I_n];
+  
+     bb = [-One_m_1; ...
+            Zero_n_1; ...
+            Zero_n_1; ...
             Zero_m_1; ...
             Zero_n_1]; 
  
@@ -66,9 +76,6 @@
            v * One_m_1;...
            One_n_1];
  
-     %lb = zeros(n+one+m+n,one);
-     %lb(1:n+one) = -Inf;
-
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [x,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
      w = x(1:n);
@@ -90,24 +97,26 @@
      B = randi(100, k, n);
      DAB = (DA*B')';
      
-     AA = [-DAB'      De         -I_m       Zero_m_k;...
-            I_k   Zero_k_1    Zero_k_m      -I_k;...
-           -I_k   Zero_k_1    Zero_k_m      -I_k];
+     AA = [-DAB'          De         -I_m     Zero_m_k;...
+            I_k     Zero_k_1    Zero_k_m    -I_k; ...
+           -I_k     Zero_k_1    Zero_k_m    -I_k; ...
+         Zero_m_k   Zero_m_1      -I_m     Zero_m_k; ...
+         Zero_k_k   Zero_k_1    Zero_k_m    -I_k];
+
   
-     bb = [-One_m_1;...
-            Zero_k_1;...
+     bb = [-One_m_1; ...
+            Zero_k_1; ...
+            Zero_k_1; ...
+            Zero_m_1; ...
             Zero_k_1]; 
  
      cc = [Zero_k_1;...
            Zero_1_1;...
            v * One_m_1;...
            One_k_1];
- 
-     lb = zeros(k+one+m+k,one);
-     lb(1:k+one) = -Inf;
 
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],lb,[],options);
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
      p = u(1:k);
      gamma = u(k+1);
      y = u(k+2:k+one+m);
@@ -138,33 +147,21 @@
             Zero_n_1; ...
             Zero_m_1; ...
             Zero_n_1];
-            
+           
      cc = [Zero_n_1; ...
            Zero_1_1; ...
            v * One_m_1; ...
            One_n_1];
       
+     m_new = size(AA, 1);
      n_new = size(AA, 2);
      
-     %B = randi(10, n_new, n_new);
-     
-     %B = rand(k, n_new);
-     B = eye(n_new);
-     %%%%%%%%%%%%%%%%%%%
-     %B = randi(10, n_new);
-     %B = diag(diag(B));
-     %%%%%%%%%%%%%%%%%%%
-    
+     B = randi(10, n_new, n_new);
      AA = AA * B';
      cc = B * cc;
-    
-     lb = zeros(n_new,1);
-     %lb(1:n-2) = 0;
-     %lb(1:n+1) = 0;
-     %lb(n+1+m:end)=-Inf
-     
+ 
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], lb, [], options);
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
   
      %%% Finding private coefficients
      try
@@ -176,5 +173,4 @@
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
- end
  end
