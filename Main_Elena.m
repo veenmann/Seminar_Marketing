@@ -16,7 +16,7 @@
  
  % Parameters
  v = 0.07;
- k = 420;          % k >= number of columns of AA
+ k = 5;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);
@@ -40,7 +40,7 @@
  One_m_1  = ones(m, one);
  One_n_1  = ones(n, one);
  One_k_1  = ones(k, one);
- I_m = -eye(m);
+ I_m = eye(m);
  I_n = eye(n);
  I_k = eye(k);
  
@@ -51,14 +51,14 @@
  %%%%%%%%%%%%%%%%%%%%%%%%% ORIGINAL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %
  %     min   v*e'*y + e'*t
- %     s.t. -D*A*w + D*e*gamma + y <= -1
+ %     s.t. -D*A*w + D*e*gamma - y <= -1
  %           w - y <= 0
  %          -w - y <= 0
  %           y >= 0
  %           t >= 0
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     AA = [-DA      De         I_m       Zero_m_n;...
+     AA = [-DA      De         -I_m       Zero_m_n;...
             I_n   Zero_n_1    Zero_n_m    -I_n;...
            -I_n   Zero_n_1    Zero_n_m    -I_n];
   
@@ -85,7 +85,7 @@
  %%%%%%%%%%%%%%% A --> AB', w --> p, t --> q %%%%%%%%%%%%%%%%%
  % 
  %       min    v*e'*y + e'*q
- %       s.t.  -D*A*B'*p + D*e*gamma + y <= -1
+ %       s.t.  -D*A*B'*p + D*e*gamma - y <= -1
  %              P - q <= 0
  %             -p - q <= 0
  %              y >= 0
@@ -95,7 +95,7 @@
      B = randi(100, k, n);
      DAB = (DA*B')';
      
-     AA = [-DAB'      De         I_m       Zero_m_k;...
+     AA = [-DAB'      De         -I_m       Zero_m_k;...
             I_k   Zero_k_1    Zero_k_m      -I_k;...
            -I_k   Zero_k_1    Zero_k_m      -I_k];
   
@@ -125,44 +125,39 @@
  %%%%%%%%%%%%%%%%%%%%% x = B'u %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % 
  %      min     v*e'*B_y'*u + e'*B_t'*u
- %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u + B_y'*u <= -1
+ %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u - B_y'*u <= -1
  %              B_w'*u - B_y'*u <= 0
  %             -B_w'*u - B_y'*u <= 0
  %              B_y'*u >= 0
  %              B_t'*u >= 0
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
-     B = rand(k,2*n+m+1);
-     B_w=B(:,1:n);
-     %size(B_w);
-     B_gamma=B(:,n+1);
-     %size(B_gamma);
-     B_y=B(:,n+2:n+1+m);
-     %size(B_y);
-     B_t=B(:,n+2+m:end);
-     %size(B_t);
-    
-     AA = [-DA*B_w'          De*B_gamma'         I_m*B_y'     Zero_m_n*B_t';...
-            I_n*B_w'     Zero_n_1*B_gamma'    Zero_n_m*B_y'   -I_n*B_t'; ...
-           -I_n*B_w'     Zero_n_1*B_gamma'    Zero_n_m*B_y'     -I_n*B_t'; ...
-         Zero_m_n*B_w'   Zero_m_1*B_gamma'      -I_m*B_y'      Zero_m_n*B_t'; ...
-         Zero_n_n*B_w'   Zero_n_1*B_gamma'    Zero_n_m*B_y'     -I_n*B_t'];
+     AA = [-DA          De         -I_m     Zero_m_n;...
+            I_n     Zero_n_1    Zero_n_m    -I_n; ...
+           -I_n     Zero_n_1    Zero_n_m    -I_n; ...
+         Zero_m_n   Zero_m_1      -I_m     Zero_m_n; ...
+         Zero_n_n   Zero_n_1    Zero_n_m    -I_n];
 
      bb = [-One_m_1; ...
             Zero_n_1; ...
             Zero_n_1; ...
             Zero_m_1; ...
             Zero_n_1];
-            
-     cc = [B_w * Zero_n_1; ...
-           B_gamma * Zero_1_1; ...
-           v * B_y * One_m_1; ...
-           B_t * One_n_1];
+           
+     cc = [Zero_n_1; ...
+           Zero_1_1; ...
+           v * One_m_1; ...
+           One_n_1];
       
-          
+     m_new = size(AA, 1);
+     n_new = size(AA, 2);
+     
+     B = randi(10, n_new, n_new);
+     AA2 = AA * B';
+     cc = B * cc;
+ 
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
+     [u,f,exitflag,out,lambda] = linprog(cc, AA2, bb, [], [], [], [], options);
   
      %%% Finding private coefficients
      try
