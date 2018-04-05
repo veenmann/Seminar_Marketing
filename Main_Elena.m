@@ -16,7 +16,7 @@
  
  % Parameters
  v = 0.07;
- k = 5;          % k >= number of columns of AA
+ k = 4226;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);
@@ -153,11 +153,11 @@
      n_new = size(AA, 2);
      
      B = randi(10, n_new, n_new);
-     AA2 = AA * B';
+     AA = AA * B';
      cc = B * cc;
  
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA2, bb, [], [], [], [], options);
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
   
      %%% Finding private coefficients
      try
