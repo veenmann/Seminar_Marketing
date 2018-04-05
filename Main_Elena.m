@@ -16,7 +16,7 @@
  
  % Parameters
  v = 0.07;
- k = 4226;          % k >= number of columns of AA
+ k = 4;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);

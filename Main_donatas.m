@@ -1,15 +1,33 @@
+<<<<<<< Updated upstream
+=======
+%A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
+     %housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
+      %day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
+      %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
+  %A = [age, duration, campaign, pdays, previous,...
+      %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
+>>>>>>> Stashed changes
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
  function Main_donatas(A,e)
  % CASE = 0         Original problem
  % CASE = 1         A --> AB', w --> p, t --> q
  % CASE = 2         x = B'u
     
+<<<<<<< Updated upstream
    CASE = 0;        % <--- CHANGE THIS ONE
+=======
+   CASE = 2;        % <--- CHANGE THIS ONE
+ 
+>>>>>>> Stashed changes
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
  % Parameters
  v = 0.07;
+<<<<<<< Updated upstream
  k = 420;          % k >= number of columns of AA
+=======
+ k = 5;          % k >= number of columns of AA
+>>>>>>> Stashed changes
  
  % Dimentions
  m = size(A, 1);
@@ -127,7 +145,11 @@
  %              B_t'*u >= 0
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<<<<<<< Updated upstream
      AA = [-DA          De         -I_m     Zero_m_n;...
+=======
+     AA = [-DA          De         I_m     Zero_m_n;...
+>>>>>>> Stashed changes
             I_n     Zero_n_1    Zero_n_m    -I_n; ...
            -I_n     Zero_n_1    Zero_n_m    -I_n; ...
          Zero_m_n   Zero_m_1      -I_m     Zero_m_n; ...
@@ -138,7 +160,11 @@
             Zero_n_1; ...
             Zero_m_1; ...
             Zero_n_1];
+<<<<<<< Updated upstream
             
+=======
+           
+>>>>>>> Stashed changes
      cc = [Zero_n_1; ...
            Zero_1_1; ...
            v * One_m_1; ...
@@ -146,14 +172,21 @@
       
      n_new = size(AA, 2);
      
+<<<<<<< Updated upstream
      %B = randi(10, n_new, n_new);
      
      %B = rand(k, n_new);
      B = eye(n_new);
+=======
+     B = randi(10, n_new, n_new);
+     %B = rand(k, n_new);
+     %B = eye(n_new);
+>>>>>>> Stashed changes
      %%%%%%%%%%%%%%%%%%%
      %B = randi(10, n_new);
      %B = diag(diag(B));
      %%%%%%%%%%%%%%%%%%%
+<<<<<<< Updated upstream
     
      AA = AA * B';
      cc = B * cc;
@@ -163,6 +196,13 @@
      %lb(1:n+1) = 0;
      %lb(n+1+m:end)=-Inf
      
+=======
+     AA = AA * B';
+     cc = B * cc;
+  
+     lb = zeros(n_new,one);
+     lb(1:n+one) = -Inf;
+>>>>>>> Stashed changes
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], lb, [], options);
   
