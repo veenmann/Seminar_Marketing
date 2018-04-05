@@ -20,6 +20,7 @@
  neg_I1 = -1*I1;
  neg_I2 = -1*I2;
  
+<<<<<<< Updated upstream
  gamma_zeros= zeros(size(A,2),1);      %53x1
  y_zeros= zeros(size(A,2),size(A,1));  %53x4119 
  t_zeros= zeros(size(A,1),size(A,2));  %4119X53
@@ -30,6 +31,11 @@
  
  %Create parameter v
  v=0.07; 
+=======
+ %Create parameter v
+ v = 1;
+
+>>>>>>> Stashed changes
  %Create cost c
  c = [zeros(1,size(A,2)),zeros(1),v*ones(1,size(A,1)),ones(1,size(A,2))]';
  
@@ -38,8 +44,17 @@
  lb(54)=-Inf;
 
  %Run LP optimization
+<<<<<<< Updated upstream
  b=[(-1)*ones(4119,1);zeros(53,1);zeros(53,1)];
  LP = linprog(c,A_matrix,b,[],[],lb,[]);
  w = LP(1:53);
  gamma = LP(54)
  y = LP(55:end);
+=======
+ LP = linprog(c,A_matrix,(-1)*ones(4119,1),[],[],lb,[]);
+ w_pos = LP(1:53);
+ w_neg = LP(54:106);
+ gamma = LP(107)
+ y = LP(108:end);
+
+>>>>>>> Stashed changes

@@ -2,15 +2,19 @@
      %housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
       %day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
       %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
-  %A = [age, duration, campaign, pdays, previous,...
-      %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
+  A = [age, duration, campaign, pdays, previous,...
+      consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
  
  % CASE = 0         Original problem
  % CASE = 1         A --> AB', w --> p, t --> q
  % CASE = 2         x = B'u
     
+<<<<<<< Updated upstream
    CASE = 2;        % <--- CHANGE THIS ONE
+=======
+   CASE = 1;        % <--- CHANGE THIS ONE
+>>>>>>> Stashed changes
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -75,9 +79,9 @@
      lb(1:n+one) = -Inf;
 
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [x,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],lb,[],options);
-     w = x(1:n);
-     gamma = x(n+1);
+     [x,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],lb,[]);
+     w = x(1:n)
+     gamma = x(n+1)
      y = x(n+2:n+one+m);
      t = x(n+one+m+1:end);
  
@@ -112,9 +116,9 @@
      lb(1:k+one) = -Inf;
 
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],lb,[],options);
-     p = u(1:k);
-     gamma = u(k+1);
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],lb,[]);
+     p = u(1:k)
+     gamma = u(k+1)
      y = u(k+2:k+one+m);
      q = u(k+one+m+1:end);
      
@@ -163,7 +167,7 @@
      cc = B * cc;
   
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], []);
   
      %%% Finding private coefficients
      try
