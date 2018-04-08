@@ -1,4 +1,4 @@
-function x=Main_donatas(A, e)
+function [x, f, w, gamma, y, t] = Main_donatas(A, e)
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
  
  % CASE = 0         Original problem
@@ -9,14 +9,14 @@ function x=Main_donatas(A, e)
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
- % Parameters
- v = 0.07;
- k = 607;          % k >= number of columns of AA
- 
- % Dimentions
+  % Dimentions
  m = size(A, 1);
  n = size(A, 2);
  one = 1;
+ 
+ % Parameters
+ v = 0.07;
+ k = n+one+m+n + 1;          % k >= number of columns of AA
  
  % Block matrices
  D = diag(e);
@@ -62,13 +62,13 @@ function x=Main_donatas(A, e)
             Zero_n_1; ...
             Zero_m_1; ...
             Zero_n_1]; 
- 
+
      cc = [Zero_n_1;...
            Zero_1_1;...
            v * One_m_1;...
            One_n_1];
  
-     options = optimoptions('linprog','Algorithm','dual-simplex','Display','iter');
+     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [x,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
      w = x(1:n);
      gamma = x(n+1);
@@ -86,7 +86,7 @@ function x=Main_donatas(A, e)
  %              q >= 0
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     B = randi(100, k, n);
+     B = rand(k, n);
      DAB = (DA*B')';
      
      AA = [-DAB'      De          -I_m     Zero_m_k;...
@@ -135,10 +135,10 @@ function x=Main_donatas(A, e)
          Zero_n_n   Zero_n_1    Zero_n_m    -I_n];
 
      bb = [-One_m_1; ...
-            Zero_n_1; ...
-            Zero_n_1; ...
-            Zero_m_1; ...
-            Zero_n_1];
+           Zero_n_1; ...
+           Zero_n_1; ...
+           Zero_m_1; ...
+           Zero_n_1];
            
      cc = [Zero_n_1; ...
            Zero_1_1; ...
@@ -147,13 +147,15 @@ function x=Main_donatas(A, e)
       
      n_new = size(AA, 2);
      
-     B = randi(10, n_new, n_new);
+     B = rand(k, n_new);
+
      AA = AA * B';
+     cc_true = cc;
      cc = B * cc;
- 
+
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
-  
+      
      %%% Finding private coefficients
      try
         x = B' * u;
@@ -161,6 +163,7 @@ function x=Main_donatas(A, e)
         gamma = x(n+1);
         y = x(n+2:n+one+m);
         t = x(n+one+m+1:end);
+        f = cc_true'*x;             % true cost
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
