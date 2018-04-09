@@ -1,17 +1,17 @@
-% A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
-%      housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
-%       day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
-%       consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
-%   A = [age, duration, campaign, pdays, previous,...
-%       consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [x, f, w, gamma, y, t] = Main_nynke(A, e)
+%A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
+     %housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
+      %day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
+      %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
+  %A = [age, duration, campaign, pdays, previous,...
+      %consconfidx, conspriceidx, empvarrate, euribor3m, nremployed];
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
  
  % CASE = 0         Original problem
  % CASE = 1         A --> AB', w --> p, t --> q
  % CASE = 2         x = B'u
- % CASE = 3         Permutation
- 
-   CASE = 2;        % <--- CHANGE THIS ONE
+    
+   CASE = 1;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -171,79 +171,9 @@
         gamma = x(n+1);
         y = x(n+2:n+one+m);
         t = x(n+one+m+1:end);
+        f = cc_true'*x;         % true cost
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
-
- elseif CASE == 3
- %%%%%%%%%%%%%%%%%%%%% x = B'u %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- % 
- %      min     v*e'*B_y'*u + e'*B_t'*u
- %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u - B_y'*u <= -1
- %              B_w'*u - B_y'*u <= 0
- %             -B_w'*u - B_y'*u <= 0
- %              B_y'*u >= 0
- %              B_t'*u >= 0
- %
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    P1 = eye(n);
-        P1 = P1(randperm(n),:);
-    P2 = eye(n);
-        P2 = P2(randperm(n),:);
-    P3 = eye(m);
-        P3 = P3(randperm(m),:);
-    P4 = eye(n);
-        P4 = P4(randperm(n),:);
- 
-    AA = [-DA          De         -I_m     Zero_m_n;...
-            P1*I_n     Zero_n_1    Zero_n_m    -P1*I_n; ...
-           -P2*I_n     Zero_n_1    Zero_n_m    -P2*I_n; ...
-         Zero_m_n   Zero_m_1      -P3*I_m     Zero_m_n; ...
-         Zero_n_n   Zero_n_1    Zero_n_m    -P4*I_n];
-
-     bb = [-One_m_1; ...
-           Zero_n_1; ...
-           Zero_n_1; ...
-           Zero_m_1; ...
-           Zero_n_1];
-
-    cc = [Zero_n_1; ...
-          Zero_1_1; ...
-          v * One_m_1; ...
-          One_n_1];
-      
-    m_new = size(AA, 1);
-    n_new = size(AA, 2);
-
-    B = randi(10, n_new, n_new);
-    AA = AA * B';
-    cc = B * cc;
-
-    
-        
-%     %Permute the AA matrix
-%     AA(m+1:m+n,1:n) = P1*AA(m+1:m+n,1:n);                   %P1
-%     AA(m+1:m+n,(end-n):end) = P1*AA(m+1:m+n,(end - n):end); %P1
-%     
-%     AA(m+n+1:m+2*n,1:n) = P2*AA(m+n+1:m+2*n,1:n);                 %P2
-%     AA(m+n+1:m+2*n,(end-n):end) = P2*AA(m+n+1:m+2*n,(end-n):end); %P2
-%     
-%     AA(m+2*n+1:2*m+2*n,n+2:n+m) = P3*AA(m+2*n+1:2*m+2*n,n+2:n+m); %P3
-%     
-%     AA(2*m+2*n+1:2*m+3*n,(end-n):end) = P4*AA(2*m+2*n+1:2*m+3*n,(end-n):end); %P4  
-    
-    
-    options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter', 'MaxIterations', 1500);
-    [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
-     
-     %%% Finding private coefficients
-     try
-        x = B' * u;
-        w = x(1:n);
-        gamma = x(n+1);
-        y = x(n+2:n+one+m);
-        t = x(n+one+m+1:end);
-     catch
-        fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
-     end
+ end
  end
