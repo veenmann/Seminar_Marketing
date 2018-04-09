@@ -1,4 +1,4 @@
-function [x, f, w, gamma, y, t] = Main_nynke(A, e)
+
 % A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
 %      housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
 %       day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
@@ -172,7 +172,6 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
         gamma = x(n+1);
         y = x(n+2:n+one+m);
         t = x(n+one+m+1:end);
-         f = cc_true'*x;         % true cost
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
@@ -245,9 +244,7 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
         gamma = x(n+1);
         y = x(n+2:n+one+m);
         t = x(n+one+m+1:end);
-        f = cc_true'*x;         % true cost
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
  end
-end
