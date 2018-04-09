@@ -2,10 +2,11 @@ function [x, f, w, gamma, y, t] = Main_donatas(A, e)
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
  
  % CASE = 0         Original problem
- % CASE = 1         A --> AB', w --> p, t --> q
- % CASE = 2         x = B'u
-    
-   CASE = 2;        % <--- CHANGE THIS ONE
+ % CASE = 1         x = B'u
+ % CASE = 2         A --> AB', w --> p, t --> q
+ % CASE = 3         Permutations
+ 
+   CASE = 0;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -15,8 +16,8 @@ function [x, f, w, gamma, y, t] = Main_donatas(A, e)
  one = 1;
  
  % Parameters
- v = 0.07;
- k = n+one+m+n + 1;          % k >= number of columns of AA
+ v = 100;
+ k = n+one+m+n;          % k >= number of columns of AA
  
  % Block matrices
  D = diag(e);
@@ -45,8 +46,8 @@ function [x, f, w, gamma, y, t] = Main_donatas(A, e)
  %
  %     min   v*e'*y + e'*t
  %     s.t. -D*A*w + D*e*gamma - y <= -1
- %           w - y <= 0
- %          -w - y <= 0
+ %           w - t <= 0
+ %          -w - t <= 0
  %           y >= 0
  %           t >= 0
  %
@@ -67,63 +68,21 @@ function [x, f, w, gamma, y, t] = Main_donatas(A, e)
            Zero_1_1;...
            v * One_m_1;...
            One_n_1];
- 
+       
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [x,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
      w = x(1:n);
      gamma = x(n+1);
      y = x(n+2:n+one+m);
      t = x(n+one+m+1:end);
- 
- elseif CASE == 1
- %%%%%%%%%%%%%%% A --> AB', w --> p, t --> q %%%%%%%%%%%%%%%%%
- % 
- %       min    v*e'*y + e'*q
- %       s.t.  -D*A*B'*p + D*e*gamma - y <= -1
- %              P - q <= 0
- %             -p - q <= 0
- %              y >= 0
- %              q >= 0
- %
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     B = rand(k, n);
-     DAB = (DA*B')';
      
-     AA = [-DAB'      De          -I_m     Zero_m_k;...
-            I_k     Zero_k_1    Zero_k_m    -I_k; ...
-           -I_k     Zero_k_1    Zero_k_m    -I_k; ...
-         Zero_m_k   Zero_m_1      -I_m     Zero_m_k; ...
-         Zero_k_k   Zero_k_1    Zero_k_m    -I_k];
-
-  
-     bb = [-One_m_1; ...
-            Zero_k_1; ...
-            Zero_k_1; ...
-            Zero_m_1; ...
-            Zero_k_1]; 
- 
-     cc = [Zero_k_1;...
-           Zero_1_1;...
-           v * One_m_1;...
-           One_k_1];
-
-     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
-     p = u(1:k);
-     gamma = u(k+1);
-     y = u(k+2:k+one+m);
-     q = u(k+one+m+1:end);
-     
-     %%% Finding private coefficients
-      % IMPOSSIBLE
-  
- elseif CASE == 2     
+ elseif CASE == 1     
  %%%%%%%%%%%%%%%%%%%%% x = B'u %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % 
  %      min     v*e'*B_y'*u + e'*B_t'*u
  %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u - B_y'*u <= -1
- %              B_w'*u - B_y'*u <= 0
- %             -B_w'*u - B_y'*u <= 0
+ %              B_w'*u - B_t'*u <= 0
+ %             -B_w'*u - B_t'*u <= 0
  %              B_y'*u >= 0
  %              B_t'*u >= 0
  %
@@ -167,13 +126,57 @@ function [x, f, w, gamma, y, t] = Main_donatas(A, e)
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
+     
+ elseif CASE == 2
+ %%%%%%%%%%%%%%% A --> AB', w --> p, t --> q %%%%%%%%%%%%%%%%%
+ % 
+ %       min    v*e'*y + e'*q
+ %       s.t.  -D*A*B'*p + D*e*gamma - y <= -1
+ %              P - q <= 0
+ %             -p - q <= 0
+ %              y >= 0
+ %              q >= 0
+ %
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     B = rand(k, n);
+     DAB = (DA*B')';
+     
+     AA = [-DAB'      De          -I_m     Zero_m_k;...
+            I_k     Zero_k_1    Zero_k_m    -I_k; ...
+           -I_k     Zero_k_1    Zero_k_m    -I_k; ...
+         Zero_m_k   Zero_m_1      -I_m     Zero_m_k; ...
+         Zero_k_k   Zero_k_1    Zero_k_m    -I_k];
+
+  
+     bb = [-One_m_1; ...
+            Zero_k_1; ...
+            Zero_k_1; ...
+            Zero_m_1; ...
+            Zero_k_1]; 
+ 
+     cc = [Zero_k_1;...
+           Zero_1_1;...
+           v * One_m_1;...
+           One_k_1];
+
+     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
+     p = u(1:k);
+     gamma = u(k+1);
+     y = u(k+2:k+one+m);
+     q = u(k+one+m+1:end);
+     
+     %%% Finding private coefficients
+      % IMPOSSIBLE
+  
+ 
  elseif CASE == 3
  %%%%%%%%%%%%%%%%%%%%% x = B'u %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % 
  %      min     v*e'*B_y'*u + e'*B_t'*u
  %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u - B_y'*u <= -1
- %              P1*B_w'*u - P1*B_y'*u <= 0
- %             -P2*B_w'*u - P2*B_y'*u <= 0
+ %              P1*B_w'*u - P1*B_t'*u <= 0
+ %             -P2*B_w'*u - P2*B_t'*u <= 0
  %              P3*B_y'*u >= 0
  %              P4*B_t'*u >= 0
  %
@@ -210,21 +213,7 @@ function [x, f, w, gamma, y, t] = Main_donatas(A, e)
     AA = AA * B';
     cc_true = cc;
     cc = B * cc;
-
-    
-        
-%     %Permute the AA matrix
-%     AA(m+1:m+n,1:n) = P1*AA(m+1:m+n,1:n);                   %P1
-%     AA(m+1:m+n,(end-n):end) = P1*AA(m+1:m+n,(end - n):end); %P1
-%     
-%     AA(m+n+1:m+2*n,1:n) = P2*AA(m+n+1:m+2*n,1:n);                 %P2
-%     AA(m+n+1:m+2*n,(end-n):end) = P2*AA(m+n+1:m+2*n,(end-n):end); %P2
-%     
-%     AA(m+2*n+1:2*m+2*n,n+2:n+m) = P3*AA(m+2*n+1:2*m+2*n,n+2:n+m); %P3
-%     
-%     AA(2*m+2*n+1:2*m+3*n,(end-n):end) = P4*AA(2*m+2*n+1:2*m+3*n,(end-n):end); %P4  
-    
-    
+   
     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter', 'MaxIterations', 1500);
     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
      
