@@ -9,8 +9,8 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
  % CASE = 0         Original problem
- % CASE = 1         A --> AB', w --> p, t --> q
- % CASE = 2         x = B'u
+ % CASE = 1         x = B'u
+ % CASE = 2         A --> AB', w --> p, t --> q
  % CASE = 3         Permutation
  
    CASE = 3;        % <--- CHANGE THIS ONE
@@ -85,50 +85,8 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
      gamma = x(n+1);
      y = x(n+2:n+one+m);
      t = x(n+one+m+1:end);
- 
- elseif CASE == 1
- %%%%%%%%%%%%%%% A --> AB', w --> p, t --> q %%%%%%%%%%%%%%%%%
- % 
- %       min    v*e'*y + e'*q
- %       s.t.  -D*A*B'*p + D*e*gamma - y <= -1
- %              P - q <= 0
- %             -p - q <= 0
- %              y >= 0
- %              q >= 0
- %
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     B = randi(100, k, n);
-     DAB = (DA*B')';
-     
-     AA = [-DAB'          De         -I_m     Zero_m_k;...
-            I_k     Zero_k_1    Zero_k_m    -I_k; ...
-           -I_k     Zero_k_1    Zero_k_m    -I_k; ...
-         Zero_m_k   Zero_m_1      -I_m     Zero_m_k; ...
-         Zero_k_k   Zero_k_1    Zero_k_m    -I_k];
 
-  
-     bb = [-One_m_1; ...
-            Zero_k_1; ...
-            Zero_k_1; ...
-            Zero_m_1; ...
-            Zero_k_1]; 
- 
-     cc = [Zero_k_1;...
-           Zero_1_1;...
-           v * One_m_1;...
-           One_k_1];
-
-     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
-     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
-     p = u(1:k);
-     gamma = u(k+1);
-     y = u(k+2:k+one+m);
-     q = u(k+one+m+1:end);
-     
-     %%% Finding private coefficients
-      % IMPOSSIBLE
-  
- elseif CASE == 2     
+ elseif CASE == 1     
  %%%%%%%%%%%%%%%%%%%%% x = B'u %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % 
  %      min     v*e'*B_y'*u + e'*B_t'*u
@@ -178,7 +136,49 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
+     
+elseif CASE == 2
+ %%%%%%%%%%%%%%% A --> AB', w --> p, t --> q %%%%%%%%%%%%%%%%%
+ % 
+ %       min    v*e'*y + e'*q
+ %       s.t.  -D*A*B'*p + D*e*gamma - y <= -1
+ %              P - q <= 0
+ %             -p - q <= 0
+ %              y >= 0
+ %              q >= 0
+ %
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     B = randi(100, k, n);
+     DAB = (DA*B')';
+     
+     AA = [-DAB'          De         -I_m     Zero_m_k;...
+            I_k     Zero_k_1    Zero_k_m    -I_k; ...
+           -I_k     Zero_k_1    Zero_k_m    -I_k; ...
+         Zero_m_k   Zero_m_1      -I_m     Zero_m_k; ...
+         Zero_k_k   Zero_k_1    Zero_k_m    -I_k];
 
+  
+     bb = [-One_m_1; ...
+            Zero_k_1; ...
+            Zero_k_1; ...
+            Zero_m_1; ...
+            Zero_k_1]; 
+ 
+     cc = [Zero_k_1;...
+           Zero_1_1;...
+           v * One_m_1;...
+           One_k_1];
+
+     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
+     [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
+     p = u(1:k);
+     gamma = u(k+1);
+     y = u(k+2:k+one+m);
+     q = u(k+one+m+1:end);
+     
+     %%% Finding private coefficients
+      % IMPOSSIBLE
+  
  elseif CASE == 3
  %%%%%%%%%%%%%%%%%%%%% x = B'u %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % 

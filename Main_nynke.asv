@@ -1,4 +1,5 @@
 
+function [x, f, w, gamma, y, t] = Main_nynke(A, e)
 % A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
 %      housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
 %       day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
@@ -12,7 +13,7 @@
  % CASE = 2         x = B'u
  % CASE = 3         Permutation
  
-   CASE = 2;        % <--- CHANGE THIS ONE
+   CASE = 3;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -20,7 +21,7 @@
  v = 0.07;
  k = 4226;          % k >= number of columns of AA
  
- % Dimentions
+ % Dimensions
  m = size(A, 1);
  n = size(A, 2);
  one = 1;
@@ -160,6 +161,7 @@
      
      B = randi(10, n_new, n_new);
      AA = AA * B';
+     cc_true = cc;
      cc = B * cc;
  
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
@@ -172,6 +174,7 @@
         gamma = x(n+1);
         y = x(n+2:n+one+m);
         t = x(n+one+m+1:end);
+        f = cc_true'*x;         % true cost
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
@@ -181,10 +184,10 @@
  % 
  %      min     v*e'*B_y'*u + e'*B_t'*u
  %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u - B_y'*u <= -1
- %              B_w'*u - B_y'*u <= 0
- %             -B_w'*u - B_y'*u <= 0
- %              B_y'*u >= 0
- %              B_t'*u >= 0
+ %              P1*B_w'*u - P1*B_y'*u <= 0
+ %             -P2*B_w'*u - P2*B_y'*u <= 0
+ %              P3*B_y'*u >= 0
+ %              P4*B_t'*u >= 0
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     P1 = eye(n);
@@ -218,6 +221,7 @@
 
     B = randi(10, n_new, n_new);
     AA = AA * B';
+    cc_true = cc;
     cc = B * cc;
 
     
@@ -244,6 +248,7 @@
         gamma = x(n+1);
         y = x(n+2:n+one+m);
         t = x(n+one+m+1:end);
+        f = cc_true'*x;         % true cost
      catch
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
