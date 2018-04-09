@@ -13,7 +13,7 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
  % CASE = 2         x = B'u
  % CASE = 3         Permutation
  
-   CASE = 2;        % <--- CHANGE THIS ONE
+   CASE = 3;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -21,7 +21,7 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
  v = 0.07;
  k = 4226;          % k >= number of columns of AA
  
- % Dimentions
+ % Dimensions
  m = size(A, 1);
  n = size(A, 2);
  one = 1;
@@ -161,6 +161,7 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
      
      B = randi(10, n_new, n_new);
      AA = AA * B';
+     cc_true = cc;
      cc = B * cc;
  
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
