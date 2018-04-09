@@ -184,10 +184,10 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
  % 
  %      min     v*e'*B_y'*u + e'*B_t'*u
  %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u - B_y'*u <= -1
- %              B_w'*u - B_y'*u <= 0
- %             -B_w'*u - B_y'*u <= 0
- %              B_y'*u >= 0
- %              B_t'*u >= 0
+ %              P1*B_w'*u - P1*B_y'*u <= 0
+ %             -P2*B_w'*u - P2*B_y'*u <= 0
+ %              P3*B_y'*u >= 0
+ %              P4*B_t'*u >= 0
  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     P1 = eye(n);
