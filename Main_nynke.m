@@ -221,6 +221,7 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
 
     B = randi(10, n_new, n_new);
     AA = AA * B';
+    cc_true = cc;
     cc = B * cc;
 
     
