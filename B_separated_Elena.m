@@ -16,7 +16,7 @@
  
  % Parameters
  v = 0.07;
- k = 420;          % k >= number of columns of AA
+ k = 1680;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);
@@ -142,7 +142,7 @@
      B_t=B(:,n+2+m:end);
      %size(B_t);
     
-     AA = [-DA*B_w'          De*B_gamma'         I_m*B_y'     Zero_m_n*B_t';...
+     AA = [-DA*B_w'          De*B_gamma'         -I_m*B_y'     Zero_m_n*B_t';...
             I_n*B_w'     Zero_n_1*B_gamma'    Zero_n_m*B_y'   -I_n*B_t'; ...
            -I_n*B_w'     Zero_n_1*B_gamma'    Zero_n_m*B_y'     -I_n*B_t'; ...
          Zero_m_n*B_w'   Zero_m_1*B_gamma'      -I_m*B_y'      Zero_m_n*B_t'; ...
