@@ -1,5 +1,5 @@
 
-function [x, f, w, gamma, y, t] = Main_from_nynke(A, e)
+function [x, f, w, gamma, y, t] = Main_Elena(A, e)
 % A = [age, job_bin(:,2:12),marital_bin(:,2:4), education_bin(:,2:8),default_bin(:,1:2), ...
 %      housing_bin(:,1:2),loan_bin(:,1:2), contact_bin(:,1), month_bin(:,1:9),...
 %       day_of_week_bin(:,1:4),duration, campaign, pdays, previous, poutcome_bin(:,2:3),...
@@ -13,7 +13,7 @@ function [x, f, w, gamma, y, t] = Main_from_nynke(A, e)
  % CASE = 2         x = B'u
  % CASE = 3         Permutation
  
-   CASE = 3;        % <--- CHANGE THIS ONE
+   CASE = 0;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -263,3 +263,12 @@ function [x, f, w, gamma, y, t] = Main_from_nynke(A, e)
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
  end
+ 
+%%%%%%%%%%%%%%%%%%%%%%%
+% For the forecasting %
+%%%%%%%%%%%%%%%%%%%%%%%
+
+A1=A(1:200,:);
+A2=A(201:end,:);
+e1=e(1:200);
+e2=e(201:end);
