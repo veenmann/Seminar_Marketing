@@ -3,7 +3,7 @@
  % CASE = 2         x = B'u
  % CASE = 3         Permutation
  
-   CASE = 0;        % <--- CHANGE THIS ONE
+   CASE = 1;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -67,7 +67,7 @@ b = [ -One_n1; ...
 c = [ O_nk;...
       One_n];
   
-B=randi(10,2*n+k,2*n+k);
+B=rand(2*n+k,2*n+k);
 
 EE=E*B';
 cc=c'*B';
