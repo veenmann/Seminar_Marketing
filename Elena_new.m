@@ -3,7 +3,7 @@
  % CASE = 2         x = B'u
  % CASE = 3         Permutation
  
-   CASE = 1;        % <--- CHANGE THIS ONE
+   CASE = 0;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -67,13 +67,12 @@ b = [ -One_n1; ...
 c = [ O_nk;...
       One_n];
   
-B=rand(n,2*n+k);
+B=randi(10,2*n+k,2*n+k);
 
 EE=E*B';
-cc=B*c;
+cc=c'*B';
 
 options = optimoptions('linprog','Algorithm','interior-point-legacy ','Display','iter');
-
 [u,f,exitflag,out,lambda] = linprog(cc, EE, b,[],[],[],[],options);
 
  %%% Finding private coefficients
@@ -87,9 +86,4 @@ options = optimoptions('linprog','Algorithm','interior-point-legacy ','Display',
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
 end
-
-
-
-
-
-     
+   

@@ -13,7 +13,7 @@ function [x, f, w, gamma, y, t] = Main_Elena(A, e)
  % CASE = 2         x = B'u
  % CASE = 3         Permutation
  
-   CASE = 0;        % <--- CHANGE THIS ONE
+   CASE = 1;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -24,7 +24,7 @@ function [x, f, w, gamma, y, t] = Main_Elena(A, e)
  
  % Parameters
  v = 0.07;
- k = n+one+m+n;          % k >= number of columns of AA
+ k = 420;          % k >= number of columns of AA
  
  % Dimentions
  m = size(A, 1);
@@ -127,6 +127,7 @@ function [x, f, w, gamma, y, t] = Main_Elena(A, e)
 
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [u,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
+     x=B'*u;
      p = u(1:k);
      gamma = u(k+1);
      y = u(k+2:k+one+m);
@@ -171,7 +172,7 @@ function [x, f, w, gamma, y, t] = Main_Elena(A, e)
 
      AA = AA * B';
      cc_true = cc;
-     cc = B * cc;
+     cc = cc' * B';
 
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);

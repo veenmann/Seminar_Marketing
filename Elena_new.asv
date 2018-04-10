@@ -58,6 +58,7 @@ elseif CASE == 1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 E = [ -DA   -D   -I_n; ...
       O_n_k   O_n  -I_n];
+
   
 b = [ -One_n1; ...
       O_n1];
@@ -66,16 +67,18 @@ b = [ -One_n1; ...
 c = [ O_nk;...
       One_n];
   
-B=rand(k,n);
-EE=E*B;;
-cc=B*c;
+B=randi(10,2*n+k,2*n+k);
 
-options = optimoptions('linprog','Algorithm','interior-point-legacy ','Display','iter');
+EE=E*B';
+cc=c'*B';
 
-[x,f,exitflag,out,lambda] = linprog(cc, EE, b,[],[],[],[],options);
+options = optimoptions('linprog','Algorithm','interior-point-legacy ','Display','MaxIter');
+OPTIONS=optimset('MaxIter',10000);
+[u,f,exitflag,out,lambda] = linprog(cc, EE, b,[],[],[],[],options);
 
  %%% Finding private coefficients
      try
+        x=B'*u;
         w = x(k+n+1:end);
         a = x(1:k);
         b = x(k+1:k+n);
@@ -84,9 +87,4 @@ options = optimoptions('linprog','Algorithm','interior-point-legacy ','Display',
         fprintf(2, 'PROBLEMS HAVE OCCURED. CHECK x\n');
      end
 end
-
-
-
-
-
-     
+   
