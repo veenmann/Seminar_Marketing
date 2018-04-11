@@ -13,19 +13,19 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
  % CASE = 2         A --> AB', w --> p, t --> q
  % CASE = 3         Permutation
  
-   CASE = 3;        % <--- CHANGE THIS ONE
+   CASE = 1;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
- % Parameters
- v = 0.07;
- k = 4226;          % k >= number of columns of AA
  
  % Dimensions
  m = size(A, 1);
  n = size(A, 2);
  one = 1;
  
+ % Parameters
+ v = 0.07;
+ k = n+one+m+n;        % k >= number of columns of AA
+  
  % Block matrices
  D = diag(e);
  DA = D*A;
@@ -56,8 +56,8 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
  %
  %     min   v*e'*y + e'*t
  %     s.t. -D*A*w + D*e*gamma - y <= -1
- %           w - y <= 0
- %          -w - y <= 0
+ %           w - t <= 0
+ %          -w - t <= 0
  %           y >= 0
  %           t >= 0
  %
@@ -72,12 +72,12 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
             Zero_n_1; ...
             Zero_n_1; ...
             Zero_m_1; ...
-            Zero_n_1]; 
+            Zero_n_1];%ones(n,1)];
  
-     cc = [Zero_n_1;...
+     cc = [One_n_1;...Zero_n_1;... 
            Zero_1_1;...
            v * One_m_1;...
-           One_n_1];
+           One_n_1];%Zero_n_1];
  
      options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
      [x,f,exitflag,out,lambda] = linprog(cc, AA, bb,[],[],[],[],options);
@@ -91,8 +91,8 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
  % 
  %      min     v*e'*B_y'*u + e'*B_t'*u
  %      s.t.   -D*A*B_w'*u + D*e*B_gamma'*u - B_y'*u <= -1
- %              B_w'*u - B_y'*u <= 0
- %             -B_w'*u - B_y'*u <= 0
+ %              B_w'*u - B_t'*u <= 0
+ %             -B_w'*u - B_t'*u <= 0
  %              B_y'*u >= 0
  %              B_t'*u >= 0
  %
@@ -109,10 +109,10 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
             Zero_m_1; ...
             Zero_n_1];
            
-     cc = [Zero_n_1; ...
+     cc = [One_n_1;... Zero_n_1; ...
            Zero_1_1; ...
            v * One_m_1; ...
-           One_n_1];
+           Zero_n_1];%One_n_1];
       
      m_new = size(AA, 1);
      n_new = size(AA, 2);
@@ -122,7 +122,7 @@ function [x, f, w, gamma, y, t] = Main_nynke(A, e)
      cc_true = cc;
      cc = B * cc;
  
-     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter');
+     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter'); 
      [u,f,exitflag,out,lambda] = linprog(cc, AA, bb, [], [], [], [], options);
   
      %%% Finding private coefficients
