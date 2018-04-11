@@ -1,4 +1,17 @@
-function plotting(A, e)
+function plotting(optimization, A, e)
+%PLOTTING Plots data points from a 2D matrix "A" according to labels (1 and -1)
+%from a vector "e". Draws a line to linearly separate data. Line 
+%coefficients are obtained from a function "optimizaiotn"
+%
+% How to call: plotting(@write_function_name, A, e)
+
+if size(A,2) ~= 2
+    error('Matrix A must have 2 columns')
+end
+if size(A,1) ~= length(e)
+    error('Vector e must have the same number of columns as the matrix A')
+end
+
 % Sizes
 x_min = min(A(:,1));
 x_max = max(A(:,1));
@@ -8,7 +21,8 @@ y_max = max(A(:,2));
 y_delta = 0.1*max([abs(y_max), abs(y_min)]);
 
 % Optimization function
-[a,b] = Elena_new(A,e);
+%[a,b] = Elena_new(A,e);
+[a, b] = optimization(A,e);
 
 % Line plot
 xp = linspace(x_min-x_delta, x_max+x_delta, 100);
@@ -38,7 +52,7 @@ function plotData(X, y)
 %   PLOTDATA(x,y) plots the data points with + for the positive examples
 %   and o for the negative examples. X is assumed to be a Mx2 matrix.
 %
-% Note: This was slightly modified such that it expects y = 1 or y = 0
+% Note: This was slightly modified such that it expects y = 1 or y = -1
 
 % Find Indices of Positive and Negative Examples
 pos = find(y == 1); neg = find(y == -1);
