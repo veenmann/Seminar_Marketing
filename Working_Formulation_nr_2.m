@@ -1,11 +1,14 @@
-function [f, a, b, u] = Elena_new(V,S) 
+function [a, b, u, f] = Working_Formulation_nr_2(A,e) 
  % CASE = 0         Original problem
- % CASE = 1         x = B'u
- % CASE = 2         A --> AB', w --> p, t --> q
+ % CASE = 1         x = B'w
  
    CASE =0;        % <--- CHANGE THIS ONE
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  V=A;           % For the full matrix input A
+% A=A(:,6:7);    % Copy inside command window if wanted to plot the data in 2 dimensions
+  S=e;
+
 n=size(V,1);
 k=size(V,2);
 
@@ -97,7 +100,11 @@ elseif CASE == 1
 % 
 % replace x = B' * w
 %
-% where B is a random matrix with 
+% where B is a random matrix where the number of columns is at least the
+%      mxp
+% number of rows in E -> p >= size(E,2) and m can be anything 
+%                     -> we used a square matrix  B
+%                                                pxp
 % 
 % V * a + b  > 0    if s_i=1
 % V * a + b <= 0    if s_i=1
@@ -145,6 +152,8 @@ elseif CASE == 1
 %       
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 E = [ -DV     -S    -I_n; ...
       O_n_k  O_n_1  -I_n];
   

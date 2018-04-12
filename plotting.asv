@@ -1,27 +1,27 @@
-function plotting(optimization, A, e)
+function plotting(optimization, V, e)
 %PLOTTING Plots data points from a 2D matrix "A" according to labels (1 and -1)
 %from a vector "e". Draws a line to linearly separate data. Line 
 %coefficients are obtained from a function "optimizaiotn"
 %
 % How to call: plotting(@write_function_name, A, e)
 
-if size(A,2) ~= 2
+if size(V,2) ~= 2
     error('Matrix A must have 2 columns')
 end
-if size(A,1) ~= length(e)
+if size(V,1) ~= length(e)
     error('Vector e must have the same number of columns as the matrix A')
 end
 
 % Sizes
-x_min = min(A(:,1));
-x_max = max(A(:,1));
+x_min = min(V(:,1));
+x_max = max(V(:,1));
 x_delta = 0.1*max([abs(x_max), abs(x_min)]);
-y_min = min(A(:,2));
-y_max = max(A(:,2));
+y_min = min(V(:,2));
+y_max = max(V(:,2));
 y_delta = 0.1*max([abs(y_max), abs(y_min)]);
 
 % Optimization function
-[a, b] = optimization(A,e);
+[a, b] = optimization(V,e);
 
 % Line plot
 xp = linspace(x_min-x_delta, x_max+x_delta, 100);
@@ -32,7 +32,7 @@ else
 end
 
 % Points plot
-plotData(A, e);
+plotData(V, e);
 hold on;
 plot(xp, yp, '-g'); 
 hold off

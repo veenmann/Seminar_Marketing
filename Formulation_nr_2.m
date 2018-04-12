@@ -1,3 +1,4 @@
+function [a,b]=Main_nienke(V,e) 
  
 %Dimesions
 n=size(A,1);
