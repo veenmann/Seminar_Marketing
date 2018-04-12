@@ -1,4 +1,4 @@
-function [a,b]=Elena_new(A,e) 
+function [a,b] = Elena_new(A,e) 
 % CASE = 0         Original problem
  % CASE = 1         A --> AB', w --> p, t --> q
  % CASE = 2         x = B'u
