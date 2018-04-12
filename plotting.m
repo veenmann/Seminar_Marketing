@@ -1,4 +1,4 @@
-function plotting(optimization, A, e)
+function f = plotting(optimization, A, e)
 %PLOTTING Plots data points from a 2D matrix "A" according to labels (1 and -1)
 %from a vector "e". Draws a line to linearly separate data. Line 
 %coefficients are obtained from a function handle "optimizaiotn"
@@ -21,7 +21,7 @@ y_max = max(A(:,2));
 y_delta = 0.1*max([abs(y_max), abs(y_min)]);
 
 % Optimization function
-[a, b] = optimization(A,e);
+[a, b, ~, f] = optimization(A,e);
 
 % Line plot
 xp = linspace(x_min-x_delta, x_max+x_delta, 100);
