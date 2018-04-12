@@ -21,12 +21,10 @@ y_max = max(A(:,2));
 y_delta = 0.1*max([abs(y_max), abs(y_min)]);
 
 % Optimization function
-%[a,b] = Elena_new(A,e);
 [a, b] = optimization(A,e);
 
 % Line plot
 xp = linspace(x_min-x_delta, x_max+x_delta, 100);
-b = mean(b);            %%%%%% <-- THIS IS WRONG %%%%%%%%
 if a(2) == 0
     yp = -(a(1)*xp + b);
 else
