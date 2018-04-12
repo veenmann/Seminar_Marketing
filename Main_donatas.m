@@ -6,7 +6,7 @@ function [x, f, w, gamma, y, t] = Main_donatas(A, e)
  % CASE = 2         A --> AB', w --> p, t --> q
  % CASE = 3         Permutations
  
-   CASE = 0;        % <--- CHANGE THIS ONE
+   CASE = 1;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
