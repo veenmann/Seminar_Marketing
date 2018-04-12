@@ -4,7 +4,7 @@ function [a,b]=Main_nienke(V,e)
  % CASE = 2         x = B'u
  % CASE = 3         Permutation
  
-   CASE = 1;        % <--- CHANGE THIS ONE
+   CASE = 0;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -38,10 +38,9 @@ b = [ -One_n_1; ...
  
   
 c = [ O_n1_1;...
-      One_n];
+      One_n_1];
   
 options = optimoptions('linprog','Algorithm','interior-point-legacy ','Display','iter');
-
 [x,f,exitflag,out,lambda] = linprog(c, E, b,[],[],[],[],options);
 
  %%% Finding private coefficients
@@ -66,7 +65,7 @@ b = [ -One_n_1; ...
  
   
 c = [ O_n1_1;...
-      One_n];
+      One_n_1];
   
 B=rand(k+1+n,k+1+n);
 
