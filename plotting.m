@@ -41,7 +41,7 @@ hold off
 title('Linear data separation')
 xlabel('attribute_1')
 ylabel('attribute_2')
-legend('Positive', 'Negative','Location','southwest')
+legend('Positive', 'Negative','Location','best')
 axis([x_min-x_delta x_max+x_delta y_min-y_delta y_max+y_delta])
 end
 
