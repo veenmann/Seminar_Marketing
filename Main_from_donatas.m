@@ -5,7 +5,7 @@ function [x, f, w, gamma, y, t] = Main_from_donatas(A, e)
  % CASE = 1         A --> AB', w --> p, t --> q
  % CASE = 2         x = B'u
     
-   CASE = 2;        % <--- CHANGE THIS ONE
+   CASE = 0;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  

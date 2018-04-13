@@ -1,7 +1,7 @@
 function plotting(optimization, A, e)
 %PLOTTING Plots data points from a 2D matrix "A" according to labels (1 and -1)
 %from a vector "e". Draws a line to linearly separate data. Line 
-%coefficients are obtained from a function "optimizaiotn"
+%coefficients are obtained from a function handle "optimizaiotn"
 %
 % How to call: plotting(@write_function_name, A, e)
 
