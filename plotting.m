@@ -1,4 +1,4 @@
-function plotting(A, e, a, b, p, n, line)
+function [axis] = plotting(A, e, a, b, p, n, line)
 % PLOTTING Plots data points from a 2D matrix "A" according to labels (1 and -1)
 % from a vector "e". Draws a line to linearly separate data. 
 % plotting(A, e, a, b)
@@ -46,10 +46,11 @@ else
 end
 
 % Points plot and line
-plot_data(A, e, p, n);
+[~] = plot_data(A, e, p, n);
 hold on;
 plot(xp, yp, 'Color', line, 'LineWidth', 3);
 hold off
+axis = get(gca,'Children');
 
 % Parameters
 title('Linear data separation')

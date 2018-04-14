@@ -1,28 +1,33 @@
-function [table,hit_rate,true_positive,true_negative,F1_score,alpha_acceptance] = performance(e, e_forecast)
+function [table,hit_rate,true_positive,true_negative,F1_score,alpha_acceptance] = performance(e, e_forecast, plot_true_vs_forecast)
 % PERFORMANCE Calculates performance measures
 % [table,hit_rate,true_positive,true_negative,F1_score,alpha_acceptance] = performance(e, e_forecast)
 % Inputs:
-%   e                     Vector with labels (1 and -1)
-%   e_forecast            Vector with predicted labels (1 and -1)
+%   e                       Vector with labels (1 and -1)
+%   e_forecast              Vector with predicted labels (1 and -1)
+%   plot_true_vs_forecast   Plot true labels vs forecast labels (boolean)
 % Outputs:
-%   table                 Prediction realization matrix
-%   hit_rate              Hit rate = True positive + True Negative
-%   true_positive         True positive fraction
-%   true_negative         True negative fraction
-%   F1_score              NO IDEA HOW TO DEFINE ??????????????????
-%   alpha_acceptance      Significance level for which e_forecast is not
-%                         significantly different from random hits
+%   table                   Prediction realization matrix
+%   hit_rate                Hit rate = True positive + True Negative
+%   true_positive           True positive fraction
+%   true_negative           True negative fraction
+%   F1_score                NO IDEA HOW TO DEFINE ??????????????????
+%   alpha_acceptance        Significance level for which e_forecast is not
+%                           significantly different from random hits
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Plotting labels
 n = length(e);
-hold on
-scatter(1:n, e, 'MarkerFaceColor', 'b')
-scatter(1:n, e_forecast, 'r','LineWidth',1.5)
-hold off
-title('Label comparison')
-axis([0 n+1 -1.5 1.5])
-legend('Real labels', 'Estimated labels')
+
+% Plotting labels
+if plot_true_vs_forecast
+    figure()
+    hold on
+    scatter(1:n, e, '.m','LineWidth',10)
+    scatter(1:n, e_forecast, '.g','LineWidth',10)
+    hold off
+    title('Label comparison')
+    axis([0 n+1 -1.5 1.5])
+    legend('Real labels', 'Estimated labels','Location','southeast')
+end
 
 % Realization table
 p_11 = mean(e_forecast == 1 & e == 1);
