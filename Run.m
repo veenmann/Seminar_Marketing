@@ -4,7 +4,7 @@
 clear; clc;
 
 % Parameters
-linear = true;
+use_linear_data = true;
 nr_positive_labels = 201;
 nr_negative_labels = 200;
 nr_noise_points = 40;
@@ -12,7 +12,7 @@ radius1 = 1;
 radius2 = 0.7;
 training_set_proportion = 0.6;
 
-if linear
+if use_linear_data
     % Create linearly separable data set
     [V,e] = linear_data(nr_positive_labels, nr_negative_labels, nr_noise_points);
 else
