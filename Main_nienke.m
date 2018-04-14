@@ -3,7 +3,7 @@ function [a, b, u, f] = Main_nienke(V,S)
  % CASE = 1         x = B'u
  % CASE = 2         A --> AB', w --> p, t --> q
  
-   CASE =1;        % <--- CHANGE THIS ONE
+   CASE = 0;        % <--- CHANGE THIS ONE
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 n=size(V,1);
