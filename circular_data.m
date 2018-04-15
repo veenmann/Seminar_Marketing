@@ -5,6 +5,7 @@ function [V,e] = circular_data(positive, negative, noise)
 %   positive    Number of points with label 1
 %   negative    Number of points with label -1
 %   noise       Number of noise points
+%   randomize   Add random noise to the data matrix
 % Outputs:
 %   V           Data matrix
 %   e           Vector with labels
@@ -23,7 +24,9 @@ e = ones(size(V,1),1);
 e(1:round(size(V,1)/2)) = -1;
 
 % Noise
-V = V + rand(size(V));
-n = randi(2,noise,1)-1;
-e(n==0) = e(n==0)*(-1);
+if randomize
+    V = V + rand(size(V));
+    n = randi(2,noise,1)-1;
+    e(n==0) = e(n==0)*(-1);
+end
 end

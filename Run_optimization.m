@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN OPTIMIZATION %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Close Figures, clear Workspace and clean Command Window
 close all; clc;
