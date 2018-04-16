@@ -18,7 +18,7 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
  % CASE = 2         A --> AB', w --> p, t --> q
  % CASE = 3         Permutation
  
-   CASE = 3;        % <--- CHANGE THIS ONE
+   CASE = 1;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -114,7 +114,7 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
      cc = [Zero_n_1; 
            Zero_1_1; ...
            v * One_m_1; ...
-           Ones_n_1];
+           One_n_1];
        
      n_new = size(AA, 2);
      
