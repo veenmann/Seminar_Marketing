@@ -18,7 +18,7 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
  % CASE = 2         A --> AB', w --> p, t --> q
  % CASE = 3         Permutation
  
-   CASE = 0;        % <--- CHANGE THIS ONE
+   CASE = 3;        % <--- CHANGE THIS ONE
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
@@ -114,7 +114,7 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
      cc = [Zero_n_1; 
            Zero_1_1; ...
            v * One_m_1; ...
-           Zero_n_1];
+           Ones_n_1];
        
      n_new = size(AA, 2);
      
@@ -123,7 +123,7 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
      cc_true = cc;
      cc = B * cc;
  
-    options = optimoptions('linprog','Algorithm','dual-simplex','Display','iter', 'MaxIterations', 1500);
+    options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter', 'MaxIterations', 1500);
      [u,f,~,~,~] = linprog(cc, AA, bb, [], [], [], [], options);
   
      %%% Finding private coefficients
@@ -170,7 +170,7 @@ elseif CASE == 2
            v * One_m_1;...
            One_k_1];
 
-     options = optimoptions('linprog','Algorithm','dual-simplex','Display','iter', 'MaxIterations', 1500);
+     options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter', 'MaxIterations', 1500);
      [u,f,~,~,~] = linprog(cc, AA, bb,[],[],[],[],options);
      p = u(1:k);
      gamma = u(k+1);
@@ -228,7 +228,7 @@ elseif CASE == 2
     cc = B * cc;
 
     
-    options = optimoptions('linprog','Algorithm','dual-simplex','Display','iter', 'MaxIterations', 1500);
+    options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter', 'MaxIterations', 1500);
     [u,f,~,~,~] = linprog(cc, AA, bb, [], [], [], [], options);
      
      %%% Finding private coefficients
