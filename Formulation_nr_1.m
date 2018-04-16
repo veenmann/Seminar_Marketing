@@ -32,9 +32,6 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
  k = n+one+m+n;        % k >= number of columns of AA
   
  % Block matrices
- D = diag(e);
- DA = D*A;
- De = D*e;
  Zero_n_1 = zeros(n,one);
  Zero_m_1 = zeros(m, one);
  Zero_1_1 = zeros(one,one);
@@ -51,7 +48,9 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
  I_m = eye(m);
  I_n = eye(n);
  I_k = eye(k);
- 
+ D = diag(e);
+ DA = D*A;
+ De = D*One_m_1;
  %%%%%%%%%%%%%%%%%%%%%%% MAIN PROGRAM %%%%%%%%%%%%%%%%%%%%%%%%%%%
  
  if CASE == 0
