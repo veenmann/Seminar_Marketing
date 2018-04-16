@@ -1,6 +1,20 @@
 function [a, b, u, f] = Working_Formulation_nr_2(A,e)
- % CASE = 0         Original problem
- % CASE = 1         x = B'w
+% WORKING_FORMUATION_NR_2 Linear Programming SVM training models for 3
+% different cases.
+% [a, b, u , f] = Working_Formuation_nr_2(A,e)
+% Inputs:
+%   A         Data matrix
+%   e         Labels (1 and -1) vector
+% Outputs:
+%   a         Coefficients vector
+%   b         Data seperation hyperplane (constant)
+%   u         Vector of misspecification errors
+%   f         Optimal cost value
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% CASE = 0         Original problem
+% CASE = 1         x = B'w
+% CASE = 2         A --> AB' (or as in our paper: V --> VB', a --> d
  
    CASE = 0;        % <--- CHANGE THIS ONE
  
