@@ -1,4 +1,4 @@
-function [a, b, u, f] = Working_Formulation_nr_2(A,e)
+function [a, b, u, f, x] = Working_Formulation_nr_2(A,e)
 % WORKING_FORMUATION_NR_2 Linear Programming SVM training models for 3
 % different cases.
 % [a, b, u , f] = Working_Formuation_nr_2(A,e)

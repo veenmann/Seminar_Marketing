@@ -22,12 +22,15 @@ end
 if use_Formulation1
     [x, f, a, b, y, t] = Formulation1(V_train, e_train);
 else
-    [a, b, u, f] = Formulation2(V_train, e_train); 
+    [a, b, u, f, x] = Formulation2(V_train, e_train); 
 end
 
 % Forecast labels for the Test data set
-e_forecast = forecast(V_test, a, b);
-
+if use_Formulation1
+    e_forecast = forecast(V_test, a, b);
+else
+    e_forecast = forecast(V_test, a, b);
+end
 % Calculate performance measures
 [table,hit_rate,true_positive,true_negative,F1_score,alpha_acceptance] = performance(e_test, e_forecast, plot_real_against_forecast_labels);
 if display_performance_measures
