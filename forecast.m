@@ -10,5 +10,5 @@ function [e_forecast] = forecast(V_test, a, b)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 e_forecast = V_test*a + b;
 e_forecast(e_forecast > 0) = 1;
-e_forecast(e_forecast <= 0) = -1;
+e_forecast(e_forecast < 0) = -1;
 end

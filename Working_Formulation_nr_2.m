@@ -1,7 +1,7 @@
 function [a, b, u, f, x] = Working_Formulation_nr_2(A,e)
 % WORKING_FORMUATION_NR_2 Linear Programming SVM training models for 3
 % different cases.
-% [a, b, u , f] = Working_Formuation_nr_2(A,e)
+% [a, b, u , f, x] = Working_Formuation_nr_2(A,e)
 % Inputs:
 %   A         Data matrix
 %   e         Labels (1 and -1) vector
@@ -40,7 +40,7 @@ if CASE == 0
 % CASE = 0                    
 % 
 % V * a + b  > 0    if s_i=1
-% V * a + b <= 0    if s_i=1
+% V * a + b  < 0    if s_i=-1
 %
 % s_i*(V*a+b) >= 1
 % D = diag (s_i)
@@ -95,7 +95,7 @@ upperbound = [ -One_n_1; ...
 c = [O_k1_1;...
      One_n_1];
   
-options = optimoptions('linprog','Algorithm','dual-simplex','Display','iter','MaxIter',1500);
+options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter','MaxIter',1500);
 [x,f,exitflag,out,lambda] = linprog(c, E, upperbound,[],[],[],[],options);
 
 %%% Finding private coefficients

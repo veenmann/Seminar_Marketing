@@ -4,9 +4,9 @@
 close all; clc;
 
 % Parameters
-use_Formulation1 = false;
+use_Formulation1 = true;
 display_performance_measures = false;
-plot_real_against_forecast_labels = true;
+plot_real_against_forecast_labels = false;
 
 % Optimization functions
 Formulation1 = @Formulation_nr_1; %%%%%%%%%%%%%%%% <--- THIS SHOULD BE CHANGED %%%%%%%%%%%%%%%%

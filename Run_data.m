@@ -8,11 +8,11 @@ use_user_input_data = false;
 plot_user_data = true;
 user_input_data = 'data_small.mat';
 use_linear_data = true;
-nr_positive_labels = 225;                 % number of V rows
-nr_negative_labels = 126;                 % number of V rows (add to above)
-nr_noise_points = 40;
-add_random_noise = true;
-nr_data_columns = 34;                     % number of V columns
+nr_positive_labels = 2250;                 % number of V rows
+nr_negative_labels = 1260;                 % number of V rows (add to above)
+nr_noise_points = 0;
+add_random_noise = false;
+nr_data_columns = 2;                     % number of V columns
 training_set_proportion = 0.8;
 
 % Data Reading or Generation
