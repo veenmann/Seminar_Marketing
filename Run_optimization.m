@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN OPTIMIZATION %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Close Figures, clear Workspace and clean Command Window
-close all; clc;
+%close all; clc;
 
 % Parameters
 use_Formulation1 = true;
-display_performance_measures = false;
-plot_real_against_forecast_labels = false;
+display_performance_measures = true;
+plot_real_against_forecast_labels = true;
 
 % Optimization functions
 Formulation1 = @Formulation_nr_1; %%%%%%%%%%%%%%%% <--- THIS SHOULD BE CHANGED %%%%%%%%%%%%%%%%

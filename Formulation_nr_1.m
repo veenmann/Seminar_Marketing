@@ -82,7 +82,7 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
            v * One_m_1;...
            One_n_1];
        
-    options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter', 'MaxIterations', 1500);
+    options = optimoptions('linprog','Algorithm','dual-simplex','Display','iter', 'MaxIterations', 1500);
      [x,f,~,~,~] = linprog(cc, AA, bb,[],[],[],[],options);
      w = x(1:n);
      gamma = x(n+1);
@@ -115,7 +115,7 @@ function [x, f, w, gamma, y, t] = Formulation_nr_1(A, e)
      cc = [Zero_n_1; 
            Zero_1_1; ...
            v * One_m_1; ...
-           Zero_n_1];
+           One_n_1];
        
      n_new = size(AA, 2);
      

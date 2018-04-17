@@ -5,11 +5,11 @@ close all; clear; clc;
 
 % Parameters
 use_user_input_data = false;
-plot_user_data = true;
+plot_user_data = false;
 user_input_data = 'data_small.mat';
 use_linear_data = true;
 nr_positive_labels = 225;                 % number of V rows
-nr_negative_labels = 126;                 % number of V rows (add to above)
+nr_negative_labels = 116;                 % number of V rows (add to above)
 nr_noise_points = 40;
 add_random_noise = true;
 nr_data_columns = 34;                     % number of V columns
