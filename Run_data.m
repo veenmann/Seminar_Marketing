@@ -4,7 +4,7 @@
 close all; clear; clc;
 
 % Parameters
-use_user_input_data = false;
+use_user_input_data = true;
 plot_user_data = true;
 user_input_data = 'data_small.mat';
 use_linear_data = true;

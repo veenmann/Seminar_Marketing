@@ -94,7 +94,7 @@ upperbound = [ -One_n_1; ...
 c = [O_k1_1;...
      One_n_1];
   
-options = optimoptions('linprog','Algorithm','interior-point-legacy','Display','iter','MaxIter',1500);
+options = optimoptions('linprog','Algorithm','dual-simplex','Display','iter','MaxIter',1500);
 [x,f,exitflag,out,lambda] = linprog(c, E, upperbound,[],[],[],[],options);
 
 %%% Finding private coefficients
